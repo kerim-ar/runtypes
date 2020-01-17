@@ -20,6 +20,7 @@ export * from './types/dictionary';
 export * from './types/union';
 export * from './types/intersect';
 export * from './types/function';
+export * from './types/callback';
 export { InstanceOf } from './types/instanceof';
 export * from './types/lazy';
 export * from './types/constraint';
