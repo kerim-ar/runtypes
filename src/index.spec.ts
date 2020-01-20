@@ -29,10 +29,12 @@ import {
   InstanceOf,
   Brand,
   Guard,
+  PromiseType,
 } from './index';
 
 import { Constructor } from './types/instanceof';
 import { ValidationError } from './errors';
+import { Callback } from './types/callback';
 
 const boolTuple = Tuple(Boolean, Boolean, Boolean);
 const record1 = Record({ Boolean, Number });
@@ -258,7 +260,78 @@ describe('contracts', () => {
   });
 });
 
+describe('callbacks', () => {
+  it('0 args', () => {
+    const f = () => 3;
+    expect(Callback(Number).check(f)()).toBe(3);
+    try {
+      Callback(String).check(f as any)();
+      fail('contract was violated but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
+
+  it('1 arg', () => {
+    const f = (x: string) => x.length;
+    expect(Callback(String, Number).check(f)('hel')).toBe(3);
+    try {
+      (Callback(String, Number).check(f) as any)(3);
+      fail('contract was violated but no exception was thrown');
+      Callback(String, String).check(f as any)('hi');
+      fail('contract was violated but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
+
+  it('2 args', () => {
+    const f = (x: string, y: boolean) => (y ? x.length : 4);
+    expect(Callback(String, Boolean, Number).check(f)('hello', false)).toBe(4);
+    try {
+      (Callback(String, Boolean, Number).check(f) as any)('hello');
+      fail('contract was violated but no exception was thrown');
+      (Callback(String, Boolean, Number).check(f) as any)('hello', 3);
+      fail('contract was violated but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
+});
+
+describe('promise', () => {
+  it('check return value', async () => {
+    const promise = Promise.resolve(2);
+
+    const value = await PromiseType(Number).check(promise);
+    expect(value).toBe(2);
+
+    try {
+      await PromiseType(String).check(promise);
+      fail('promise value was incorrect but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
+});
+
 describe('check errors', () => {
+  it('promise type', () => {
+    assertThrows(2, PromiseType(String), 'Expected Promise, but was number');
+  });
+
+  it('promise has then', () => {
+    assertThrows({}, PromiseType(String), 'Expected Promise, but was object');
+  });
+
+  it('callback type', () => {
+    assertThrows(2, Callback(String), 'Expected callback to be an function, but was number');
+  });
+
   it('tuple type', () => {
     assertThrows(
       [false, '0', true],
