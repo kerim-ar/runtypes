@@ -19,7 +19,7 @@ module.exports = {
         library: 'runtypes',
         libraryTarget: 'umd',
         umdNamedDefine: true,
-        filename: 'bundle.js',
+        filename: 'runtypes.umd.js',
         path: path.resolve(__dirname, 'dist'),
     },
 };
