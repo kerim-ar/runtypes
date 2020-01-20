@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: ['@babel/polyfill', './src/index.ts'],
     module: {
         rules: [
             {
