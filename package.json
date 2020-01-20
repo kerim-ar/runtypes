@@ -8,13 +8,15 @@
     "build": "tsc --pretty",
     "format": "node scripts/format.js",
     "test": "jest $([ \"$CI\" = true ] && echo --coverage || echo --watch)",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "typings": "dts-generator --project . --out runtypes.d.ts --exclude \"src/**/*.spec.ts\" --exclude \"node_modules/**/*.d.ts\""
   },
   "author": "Thomas Crockett",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "24.0.18",
     "coveralls": "^3.0.6",
+    "dts-generator": "^3.0.0",
     "jest": "24.9.0",
     "prettier": "^1.18.2",
     "ts-jest": "^24.1.0",
