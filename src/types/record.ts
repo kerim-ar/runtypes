@@ -30,6 +30,8 @@ export function InternalRecord<O extends { [_: string]: Runtype }, RO extends bo
           return { success: false, message: `Expected ${show(a)}, but was ${x}` };
         }
 
+        const newValue: any = {};
+
         for (const key in fields) {
           let validated = fields[key].validate(hasKey(key, x) ? x[key] : undefined);
           if (!validated.success) {
@@ -39,9 +41,11 @@ export function InternalRecord<O extends { [_: string]: Runtype }, RO extends bo
               key: validated.key ? `${key}.${validated.key}` : key,
             };
           }
+
+          newValue[key] = validated.value;
         }
 
-        return { success: true, value: x };
+        return { success: true, value: newValue };
       },
       { tag: 'record', isReadonly, fields },
     ),

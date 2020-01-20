@@ -300,6 +300,32 @@ describe('callbacks', () => {
       /* success */
     }
   });
+
+  it('works with records', () => {
+    const scheme = Record({
+      title: String,
+      fn: Callback(String, Number),
+    });
+
+    const processed = scheme.check({
+      title: 'hello',
+      fn: () => 2,
+      unknown: 'unknown',
+    });
+
+    expect(Object.keys(processed)).toStrictEqual(['title', 'fn']);
+    expect(processed.title).toBe('hello');
+
+    expect(processed.fn('123')).toBe(2);
+
+    try {
+      (processed.fn as any)(123);
+      fail('contract was violated but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
 });
 
 describe('promise', () => {
