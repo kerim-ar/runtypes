@@ -1,5 +1,6 @@
 # Compiled output
 lib/
+dist/
 
 # Code coverage output
 coverage/
@@ -10,3 +11,5 @@ npm-debug.log*
 
 # Mac stuff
 .DS_Store
+
+.idea/
