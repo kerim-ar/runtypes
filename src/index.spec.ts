@@ -29,6 +29,7 @@ import {
   InstanceOf,
   Brand,
   Guard,
+  PromiseType,
 } from './index';
 
 import { Constructor } from './types/instanceof';
@@ -301,7 +302,32 @@ describe('callbacks', () => {
   });
 });
 
+describe('promise', () => {
+  it('check return value', async () => {
+    const promise = Promise.resolve(2);
+
+    const value = await PromiseType(Number).check(promise);
+    expect(value).toBe(2);
+
+    try {
+      await PromiseType(String).check(promise);
+      fail('promise value was incorrect but no exception was thrown');
+    } catch (exception) {
+      expect(exception).toBeInstanceOf(ValidationError);
+      /* success */
+    }
+  });
+});
+
 describe('check errors', () => {
+  it('promise type', () => {
+    assertThrows(2, PromiseType(String), 'Expected Promise, but was number');
+  });
+
+  it('promise has then', () => {
+    assertThrows({}, PromiseType(String), 'Expected Promise, but was object');
+  });
+
   it('callback type', () => {
     assertThrows(2, Callback(String), 'Expected callback to be an function, but was number');
   });
