@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: ['@babel/polyfill', './src/index.ts'],
     module: {
         rules: [
