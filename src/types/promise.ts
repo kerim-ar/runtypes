@@ -5,7 +5,7 @@ export interface RuntypePromise<T> extends Runtype<Promise<T>> {
   type: T;
 }
 
-export function PromiseType<T>(type: Runtype<T>): any {
+export function PromiseType<T>(type: Runtype<T>): RuntypePromise<T> {
   return create(
     value => {
       if (!value || typeof value.then !== 'function') {
@@ -15,7 +15,7 @@ export function PromiseType<T>(type: Runtype<T>): any {
         };
       }
 
-      const res = new Promise(async (resolve, reject) => {
+      const res = new Promise<T>(async (resolve, reject) => {
         const data = await value;
 
         try {
