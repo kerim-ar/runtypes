@@ -44,20 +44,20 @@ type Person = { name: string; likes: Person[] };
 const Person: Runtype<Person> = Lazy(() => Record({ name: String, likes: Array(Person) }));
 
 class SomeClass {
-  constructor(public n: number) {}
+  constructor(public n: number) { }
 }
 class SomeOtherClass {
-  constructor(public n: number) {}
+  constructor(public n: number) { }
 }
 const SOMECLASS_TAG = 'I am a SomeClass instance (any version)';
 class SomeClassV1 {
-  constructor(public n: number) {}
+  constructor(public n: number) { }
   public _someClassTag = SOMECLASS_TAG;
   public static isSomeClass = (o: any): o is SomeClassV1 =>
     o !== null && typeof o === 'object' && o._someClassTag === SOMECLASS_TAG;
 }
 class SomeClassV2 {
-  constructor(public n: number) {}
+  constructor(public n: number) { }
   public _someClassTag = SOMECLASS_TAG;
   public static isSomeClass = (o: any): o is SomeClassV2 =>
     o !== null && typeof o === 'object' && o._someClassTag === SOMECLASS_TAG;
@@ -614,7 +614,7 @@ describe('reflection', () => {
   });
 
   it('void', () => {
-    expectLiteralField(Void, 'tag', 'unknown');
+    expectLiteralField(Void, 'tag', 'void');
   });
 
   it('boolean', () => {
@@ -728,7 +728,7 @@ describe('reflection', () => {
   });
 
   it('instanceof', () => {
-    class Test {}
+    class Test { }
     expectLiteralField(InstanceOf(Test), 'tag', 'instanceof');
     expectLiteralField(Dictionary(Array(InstanceOf(Test))), 'tag', 'dictionary');
   });
