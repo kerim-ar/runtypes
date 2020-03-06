@@ -12,7 +12,7 @@ export const Void = create<Void>(
   x => {
     if (x !== undefined && x !== null)
       throw new ValidationError(`Expected null, but was ${typeof x}`);
-    return x;
+    return { success: true, value: x };
   },
   { tag: 'void' },
 );
